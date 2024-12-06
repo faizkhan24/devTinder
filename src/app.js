@@ -1,30 +1,45 @@
-const express = require('express');
+const express = require("express");
 
 const app = express();
 
-// This will only handle GET call to /user
-
-app.get("/user", (req,res)=>{
-    res.send({firstName:"Faiz", lastName: "Khan" })
-})
-
-app.post("/user", (req,res)=>{
-    // console.log("Save Data to the database");
-    res.send('Data successfully saved to the database')
+app.use(
+  "/user",
+  (req, res,next) => {
+    // Route Handler
+    // res.send("Route Handler 1");
+    console.log("Handling Route User 1");
+    next();
+  },
+  (req,res,next) => {
+    // route handler 2
+    // res.send("Route Handler 2");
+    console.log("Handling Route User 2 ");
+    next();
     
-})
-
-app.delete("/user", (req,res)=>{
-    res.send("Deleted Succesfully")
-})
-// this will match all the HTTP method API calls to /test
-app.use("/test",(req,res)=>{
-    res.send('Hello from the server')
-})
-
-
-
-app.listen(3000, ()=>{
-    console.log('Server is successfully listening on port 3000...');
+  },
+  (req,res,next) => {
+    // route handler 2
+    // res.send("Route Handler 3");
+    console.log("Handling Route User 3 ");
+    next();
     
+  },
+  (req,res,next) => {
+    // route handler 2
+    // res.send("Route Handler 4");
+    console.log("Handling Route User 4 ");
+    next();
+    
+  },  (req,res,next) => {
+    // route handler 2
+    res.send("Route Handler 5");
+    console.log("Handling Route User 5 ");
+    
+    
+  }
+
+);
+
+app.listen(3000, () => {
+  console.log("Server is successfully listening on port 3000...");
 });
