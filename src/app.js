@@ -1,44 +1,28 @@
 const express = require("express");
 
+
 const app = express();
+const {adminAuth , userAuth} = require("./middlewares/auth");
+// handle auth middleware for all request GET,POSt
 
-app.use(
-  "/user",
-  (req, res,next) => {
-    // Route Handler
-    // res.send("Route Handler 1");
-    console.log("Handling Route User 1");
-    next();
-  },
-  (req,res,next) => {
-    // route handler 2
-    // res.send("Route Handler 2");
-    console.log("Handling Route User 2 ");
-    next();
-    
-  },
-  (req,res,next) => {
-    // route handler 2
-    // res.send("Route Handler 3");
-    console.log("Handling Route User 3 ");
-    next();
-    
-  },
-  (req,res,next) => {
-    // route handler 2
-    // res.send("Route Handler 4");
-    console.log("Handling Route User 4 ");
-    next();
-    
-  },  (req,res,next) => {
-    // route handler 2
-    res.send("Route Handler 5");
-    console.log("Handling Route User 5 ");
-    
-    
-  }
+app.use("/admin", adminAuth);
 
-);
+app.post("user/login" , (req,res)=>{
+  res.send("User Logged in successfully")
+})
+
+
+app.get("/user", userAuth, (req, res) => {
+ 
+  res.send("User Data Sent");
+});
+app.get("/admin/getAllData", (req, res) => {
+ 
+  res.send("All Data Sent");
+});
+app.get("/admin/deleteUser", (req, res) => {
+  res.send("Deleted a User");
+});
 
 app.listen(3000, () => {
   console.log("Server is successfully listening on port 3000...");
