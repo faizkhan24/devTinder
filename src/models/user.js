@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
 
 const userSchema = new mongoose.Schema(
   {
@@ -19,15 +20,24 @@ const userSchema = new mongoose.Schema(
       required: [true, 'Email is required'],
       unique: true, // Ensures no duplicates in the database
       trim: true, // Removes unnecessary spaces
-      validate: {
-        validator: (value) => /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(value), // Basic email validation
-        message: 'Invalid email format',
-      },
+      // validate: {
+      //   validator: (value) => /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(value), // Basic email validation
+      //   message: 'Invalid email format',
+      // },
+      validate(value){
+        if(!validator.isEmail(value)){
+          throw new Error('Invalid Email Addrress: ' + value);
+        }
+      }
     },
     password: {
       type: String,
       required: [true, 'Password is required'],
-      minLength: [8, 'Password must be at least 8 characters long'], // Basic password length validation
+      validate(value){
+        if(!validator.isStrongPassword(value)){
+          throw new Error('Enter a Strong Password '+ value);
+        }
+      }
     },
     age: {
       type: Number,
@@ -49,10 +59,12 @@ const userSchema = new mongoose.Schema(
       type: String,
       default:
         'https://media.istockphoto.com/id/1327592506/vector/default-avatar-photo-placeholder-icon-grey-profile-picture-business-man.jpg?s=612x612&w=0&k=20&c=BpR0FVaEa5F24GIw7K8nMWiiGmbb8qmhfkpXcp1dhQg=',
-      validate: {
-        validator: (value) => /^(http|https):\/\/[^\s$.?#].[^\s]*$/.test(value), // Basic URL validation
-        message: 'Invalid URL format for photoUrl',
-      },
+      
+        validate(value){
+          if(!validator.isURL(value)){
+            throw new Error('Invalid Photo Url '+ value);
+          }
+        }
     },
     about: {
       type: String,
