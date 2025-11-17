@@ -1,8 +1,8 @@
 const express = require("express");
 const connectDB = require("./config/database");
 const app = express();
-const User = require("./models/user");
-const user = require("./models/user");
+
+require('dotenv').config();
 
 const cookieParser = require("cookie-parser");
 
@@ -20,7 +20,10 @@ const profileRouter = require("./routes/profile");
 const requestRouter = require("./routes/request");
 const userRouter = require("./routes/user");
 const postRouter = require("./routes/post");
-const notificationRouter = require('./routes/notificationRouter')
+const notificationRouter = require('./routes/notificationRouter');
+const storyRouter = require("./routes/story");
+
+
 
 app.use("/", authRouter);
 app.use("/", profileRouter);
@@ -28,13 +31,14 @@ app.use("/", requestRouter);
 app.use("/", userRouter);
 app.use("/", postRouter);
 app.use('/',notificationRouter);
+app.use("/", storyRouter)
 
 
 
 connectDB()
   .then(() => {
     console.log("Database connection established...");
-    app.listen(3000, () => {
+    app.listen(process.env.PORT, () => {
       console.log("Sever is successfully listening on port 3000...");
     });
   })
